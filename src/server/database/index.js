@@ -7,12 +7,12 @@ mongoose.connect(process.env.MONGODB).then(() => {
 });
 
 module.exports = {
-    init: function () {
-
+    init: function (cb) {
         this.cache = {};
         this.cache.users = new Map();
 
         this.userModel = require("./models/user");
 
+        cb();
     }
 }

@@ -4,7 +4,7 @@
   "description": "Anomalous Space RPG Server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "Torsin",
   "dependencies": {
