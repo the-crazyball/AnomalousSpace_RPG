@@ -15,7 +15,6 @@ module.exports = {
 
             app.use(compression());
             app.use(minify());
-            app.use(morgan('dev'));
 
             app.use((req, res, next) => {
                 if (
