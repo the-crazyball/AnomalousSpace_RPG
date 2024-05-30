@@ -17,4 +17,4 @@ The game is still in development. Want to contribute, help and test, join the Di
 
 ## Getting Started
 
-Comning soon!
+Coming soon!
