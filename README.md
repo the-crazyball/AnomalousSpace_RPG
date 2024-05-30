@@ -6,7 +6,7 @@ Built with Node and Javascript.
 
 The game is still in development. Want to contribute, help and test, join the Discord server and read the How to contribute below.
 
-[Website](https://www.anomalousspace.io) | [Official Discord](https://discord.gg/hUw2VmtzhX)
+[Website](https://www.anomalousspace.org) | [Official Discord](https://discord.gg/hUw2VmtzhX)
 
 [How to contribute](CONTRIBUTING.md)
 
@@ -17,4 +17,4 @@ The game is still in development. Want to contribute, help and test, join the Di
 
 ## Getting Started
 
-Comning soon!
+Coming soon!
