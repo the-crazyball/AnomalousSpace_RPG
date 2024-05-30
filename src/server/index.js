@@ -1,14 +1,20 @@
 require("dotenv").config();
 
-const db = require("./database/index");
-const server = require("./server/index");
+//const db = require("./database/index");
+//const server = require("./server/index");
+
+const app = {};
 
 const startup = {
-    init: function () {
-        db.init(this.onDbReady.bind(this));        
-    },
-    onDbReady: async function () {
-        await server.init();
+    init: async () => {
+        app.db = require("./database/index")(app);
+        app.db.init(async () => {
+            app.connections = require("./security/connections")(app);
+            app.server = require("./server/index")(app);
+            app._ = require("./misc/helpers");
+            
+            await app.server.init();
+        })
     }
 }
 

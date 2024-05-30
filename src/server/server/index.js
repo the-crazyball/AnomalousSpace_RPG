@@ -6,7 +6,9 @@ const minify = require('express-minify');
 const lessMiddleware = require('less-middleware');
 const morgan = require('morgan');
 
-module.exports = {
+module.exports = app => {
+
+    return {
     init: function () {
         return new Promise(resolve => {
             const app = express();
@@ -38,18 +40,25 @@ module.exports = {
         })
     },
     onConnection: function (socket) {
-        socket.on('handshake', (socket) => {
-            console.log('handshake');
-        });
-        socket.on('disconnect', (socket) => {
-            console.log('disconnect');
-        });
-        socket.on('request', (socket) => {
-            console.log('request');
-        });
+
+        socket.on('handshake', this.onHandshake.bind(this, socket));
+        socket.on('disconnect', this.onDisconnect.bind(this, socket));
+        socket.on('request', this.onRequest.bind(this, socket));
 
         socket.emit('handshake');
     },
+    onHandshake: function (socket) {
+        app.connections.onHandshake(socket);
+        console.log('handshake');
+    },
+    onDisconnect: function (socket) {
+        app.connections.onDisconnect(socket);
+        console.log('disconnect');
+    },
+    onRequest: function (socket) {
+        console.log('request');
+    },
+
     requests: {
         root: function (req, res) {
             res.sendFile('index.html');
@@ -79,4 +88,5 @@ module.exports = {
             });
         }
     }
+}
 }
