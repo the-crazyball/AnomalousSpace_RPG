@@ -6,6 +6,8 @@ const minify = require('express-minify');
 const lessMiddleware = require('less-middleware');
 const morgan = require('morgan');
 
+const compileLessOnce = process.env.NODE_ENV === 'production';
+
 module.exports = app => {
 
     return {
@@ -27,6 +29,11 @@ module.exports = app => {
 
                 next();
             });
+
+            app.use(lessMiddleware('../', {
+                once: compileLessOnce,
+                force: !compileLessOnce
+            }));
 
             app.get('/', this.requests.root.bind(this));
             app.get(/^(.*)$/, this.requests.default.bind(this));

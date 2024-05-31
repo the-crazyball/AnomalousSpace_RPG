@@ -4,12 +4,13 @@ services:
   server:
     container_name: anomalous-space-rpg
     build:
-      dockerfile: Dockerfile
+      context: ../../
+      dockerfile: docker/development/Dockerfile
     restart: always
    
     environment:
       - NODE_ENV=development
     volumes:
-      - .:/app/anomalousspace
+      - ../../:/app/anomalousspace
     ports:
       - '4000:4000'
