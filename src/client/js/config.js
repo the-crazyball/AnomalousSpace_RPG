@@ -1,5 +1,5 @@
 define([
-	'js/system/browserStorage'
+	'js/library/browserStorage'
 ], function (
 	browserStorage
 ) {
