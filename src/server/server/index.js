@@ -17,8 +17,8 @@ module.exports = app => {
             const server = http.createServer(app);
             const io = socketIo(server, { transports: ['websocket'] });
 
-            app.use(compression());
-            app.use(minify());
+            //app.use(compression());
+            //app.use(minify());
 
             app.use((req, res, next) => {
                 if (

@@ -1,7 +1,7 @@
 define([
-	
+	'js/library/events'
 ], function (
-	
+	events
 ) {
 	return {
 		centeredX: false,
@@ -25,8 +25,8 @@ define([
 				.appendTo(container)
 				.data('ui', this);
 
-			//this.el.on('mouseenter', this.onMouseEnter.bind(this, true));
-			//this.el.on('mouseleave', this.onMouseEnter.bind(this, false));
+			this.el.on('mouseenter', this.onMouseEnter.bind(this, true));
+			this.el.on('mouseleave', this.onMouseEnter.bind(this, false));
 
 			if (this.modal)
 				this.el.addClass('modal');
@@ -45,13 +45,13 @@ define([
 			if ((this.centeredX) || (this.centeredY))
 				this.center(this.centeredX, this.centeredY);
 
-			//this.registerUiEvents();
+			this.registerUiEvents();
 
 			this.shown = this.el.is(':visible');
 
-			// events.emit('onAfterRenderUi', {
-			// 	ui: this
-			// });
+			events.emit('onAfterRenderUi', {
+				ui: this
+			});
 		},
 
 		registerUiEvents: function () {
@@ -147,7 +147,7 @@ define([
 			if (this.afterHide)
 				this.afterHide();
 
-			//events.emit('onHideUi', this);
+			events.emit('onHideUi', this);
 		},
 
 		destroy: function () {
@@ -170,30 +170,30 @@ define([
 				this.el.addClass('disabled');
 		},
 
-		// onEvent: function (eventName, callback) {
-		// 	let list = this.eventCallbacks[eventName] || (this.eventCallbacks[eventName] = []);
-		// 	let eventCallback = events.on(eventName, callback);
-		// 	list.push(eventCallback);
+		onEvent: function (eventName, callback) {
+			let list = this.eventCallbacks[eventName] || (this.eventCallbacks[eventName] = []);
+			let eventCallback = events.on(eventName, callback);
+			list.push(eventCallback);
 
-		// 	return eventCallback;
-		// },
+			return eventCallback;
+		},
 
-		// offEvent: function (eventCallback) {
-		// 	for (let e in this.eventCallbacks) {
-		// 		this.eventCallbacks[e].forEach(function (c) {
-		// 			if (c === eventCallback)
-		// 				events.off(e, c);
-		// 		}, this);
-		// 	}
-		// },
+		offEvent: function (eventCallback) {
+			for (let e in this.eventCallbacks) {
+				this.eventCallbacks[e].forEach(function (c) {
+					if (c === eventCallback)
+						events.off(e, c);
+				}, this);
+			}
+		},
 
-		// offEvents: function () {
-		// 	for (let e in this.eventCallbacks) {
-		// 		this.eventCallbacks[e].forEach(function (c) {
-		// 			events.off(e, c);
-		// 		}, this);
-		// 	}
-		// },
+		offEvents: function () {
+			for (let e in this.eventCallbacks) {
+				this.eventCallbacks[e].forEach(function (c) {
+					events.off(e, c);
+				}, this);
+			}
+		},
 
 		toggle: function () {
 			if (!this.shown)
@@ -201,7 +201,7 @@ define([
 			else
 				this.hide();
 
-			//events.emit('onToggleUi', this);
+			events.emit('onToggleUi', this);
 		},
 
 		buildClose: function () {

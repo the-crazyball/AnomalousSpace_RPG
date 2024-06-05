@@ -6,6 +6,8 @@ define([
     Grid
 ) {
     return {
+        stage: null,
+
         pos: {
             x: 0,
             y: 0
@@ -32,19 +34,19 @@ define([
            
             const background = Sprite.from('images/background.jpg')
 
-            const stage = new Container();
+            this.stage = new Container();
             const map = new Container();
             //map.setTransform(this.width / 2 | 0, this.height / 2 | 0, 1, 1);
 
             const cnt = new ParticleContainer();
-            stage.addChild(background);
-            stage.addChild(map);
-            stage.addChild(cnt);
+            this.stage.addChild(background);
+            this.stage.addChild(map);
+            this.stage.addChild(cnt);
 
             const SCALE = 1;
 
-			const centerX = ~~((-stage.x / SCALE) + (this.width / (SCALE * 2)));
-			const centerY = ~~((-stage.y / SCALE) + (this.height / (SCALE * 2)));
+			const centerX = ~~((-this.stage.x / SCALE) + (this.width / (SCALE * 2)));
+			const centerY = ~~((-this.stage.y / SCALE) + (this.height / (SCALE * 2)));
 
             const DEPTH = 2;
 
@@ -81,10 +83,10 @@ define([
                 map.addChild(hex)
             })
 
-            const ticker = new Ticker();
-            let elapsed = 0;
-            ticker.add(() => this.renderer.render(stage));
-            ticker.start();
+            // const ticker = new Ticker();
+            // let elapsed = 0;
+            // ticker.add(() => this.renderer.render(stage));
+            // ticker.start();
 
             // const emitter = new PIXI.particles.Emitter(cnt, {
             //     lifetime: { min: 0.1, max: 3 },
@@ -107,6 +109,17 @@ define([
             // });
 
 
-        }
+        },
+        update: function () {
+			let time = +new Date();
+
+			this.lastTick = time;
+		},
+        render: function () {
+			if (!this.stage)
+				return;
+
+			this.renderer.render(this.stage);
+		}
     }
 })

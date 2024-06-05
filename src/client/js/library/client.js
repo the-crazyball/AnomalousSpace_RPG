@@ -1,7 +1,9 @@
 define([
-	'socket'
+	'socket',
+	'js/library/events'
 ], function (
-	io
+	io,
+	events
 ) {
     return {
         doneConnect: false,
@@ -14,6 +16,8 @@ define([
             this.socket.on('connect', this.onConnected.bind(this, cb));
 			this.socket.on('handshake', this.onHandshake.bind(this));
 			this.socket.on('dc', this.onDisconnect.bind(this));
+
+			events.emit('onBuildIngameUis');
         },
         onConnected: function (cb) {
 			if (this.doneConnect)
@@ -30,6 +34,9 @@ define([
         onHandshake: function () {
 			console.log('handshake initiated')
 			this.socket.emit('handshake');
+		},
+		request: function (msg) {
+			this.socket.emit('request', msg, msg.callback);
 		},
     }
 })

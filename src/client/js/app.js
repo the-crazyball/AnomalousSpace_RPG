@@ -18,9 +18,13 @@ require.config({
 		jquery: {
 			exports: '$'
 		},
+		helpers: {
+			deps: [
+				'jquery'
+			]
+		},
         main: {
             deps: [
-                'jquery',
                 'helpers',
                 'js/library/input'
             ]

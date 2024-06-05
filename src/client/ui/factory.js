@@ -1,7 +1,9 @@
 define([
     'ui/default',
+    'js/library/events'
 ], function (
-    uiDefault
+    uiDefault,
+    events
 ) {
     return {
         uis: [],
@@ -11,30 +13,40 @@ define([
             'messages'
         ],
 
-        init: async function () {
+        init: function () {
+            events.on('onBuildIngameUis', this.onBuildIngameUis.bind(this));
+			events.on('onUiKeyDown', this.onUiKeyDown.bind(this));
+			events.on('onResize', this.onResize.bind(this));
+        },
+        onBuildIngameUis: async function () {
+            if (!this.ingameUisBuilt) {
+				events.clearQueue();
 
-            await Promise.all(
-                this.uiList.map(u => {
-                    const uiType = u.path ? u.path.split('/').pop() : u;
+                await Promise.all(
+                    this.uiList.map(u => {
+                        const uiType = u.path ? u.path.split('/').pop() : u;
 
-                    return new Promise(res => {
-                        const doneCheck = () => {
-                            const isDone = this.uis.some(ui => ui.type === uiType);
-                            if (isDone) {
-                                res();
+                        return new Promise(res => {
+                            const doneCheck = () => {
+                                const isDone = this.uis.some(ui => ui.type === uiType);
+                                if (isDone) {
+                                    res();
 
-                                return;
-                            }
+                                    return;
+                                }
 
-                            setTimeout(doneCheck, 100);
-                        };
+                                setTimeout(doneCheck, 100);
+                            };
 
-                        this.build(uiType, { path: u.path });
+                            this.build(uiType, { path: u.path });
 
-                        doneCheck();
-                    });
-                })
-            );
+                            doneCheck();
+                        });
+                    })
+                );
+                this.ingameUisBuilt = true;
+            }
+
         },
         build: function (type, options) {
 			let className = 'ui' + type[0].toUpperCase() + type.substr(1);
@@ -70,5 +82,40 @@ define([
 
 			this.uis.push(ui);
 		},
+        onResize: function () {
+			this.uis.forEach(function (ui) {
+				if (ui.centered)
+					ui.center();
+				else if ((ui.centeredX) || (ui.centeredY))
+					ui.center(ui.centeredX, ui.centeredY);
+			}, this);
+		},
+        onUiKeyDown: function (keyEvent) {
+			if (keyEvent.key === 'esc') {
+				this.uis.forEach(u => {
+					if (!u.modal || !u.shown)
+						return;
+
+					keyEvent.consumed = true;
+					u.toggle();
+				});
+				
+				$('.uiOverlay').hide();
+				events.emit('onHideContextMenu');
+			} else if (['o', 'j', 'h', 'i'].indexOf(keyEvent.key) > -1)
+				$('.uiOverlay').hide();
+		},
+        update: function () {
+			let uis = this.uis;
+			let uLen = uis.length;
+			for (let i = 0; i < uLen; i++) {
+				let u = uis[i];
+				if (u.update)
+					u.update();
+			}
+		},
+        getUi: function (type) {
+			return this.uis.find(u => u.type === type);
+		}
     }
 })

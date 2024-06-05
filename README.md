@@ -18,3 +18,15 @@ The game is still in development. Want to contribute, help and test, join the Di
 ## Getting Started
 
 Comning soon!
+
+## Credit
+
+Anomalous Space RPG is built/devired from the original source repository of [IsleWard](https://gitlab.com/Isleward/isleward). Thanks [@Waf](https://gitlab.com/BigBadWaffle)
+
+## License
+
+Anomalous Space RPG is [AGPL licensed](./LICENSE).
+
+## Copyright
+
+Copyright Contributors to the Anomalous Space RPG project.
