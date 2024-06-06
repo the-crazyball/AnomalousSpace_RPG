@@ -1,6 +1,16 @@
 version: '3.8'
 
 services:
+  rethinkdb:
+    image: rethinkdb:latest
+    container_name: rethinkdb
+    restart: always
+    ports:
+      - "8080:8080"
+      - "29015:29015"
+      - "28015:28015"
+    command: 'rethinkdb --server-tag primary --server-name rethinkdb --bind all'
+
   server:
     container_name: anomalous-space-rpg
     build:

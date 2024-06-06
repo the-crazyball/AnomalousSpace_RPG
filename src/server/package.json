@@ -17,6 +17,7 @@
     "less-middleware": "^3.1.0",
     "mongoose": "^8.4.0",
     "morgan": "^1.10.0",
+    "rethinkdbdash": "^2.3.31",
     "socket.io": "^4.7.5"
   }
 }
