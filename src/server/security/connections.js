@@ -1,39 +1,38 @@
 const objects = require('../objects/objects');
-const eventEmitter = require('../misc/events');
 
 const { route, routeGlobal } = require('./connections/route');
 
 module.exports = {
-    players: [],
+	players: [],
 
-    sockets: null,
-    playing: 0,
+	sockets: null,
+	playing: 0,
 
-    onHandshake: function (socket) {
-        if (this.players.some(f => f.socket.id === socket.id))
-            return;
+	onHandshake: function (socket) {
+		if (this.players.some(f => f.socket.id === socket.id))
+			return;
 
-        const p = objects.build();
-        p.socket = socket;
-        p.addComponent('auth');
-        p.addComponent('player');
+		const p = objects.build();
+		p.socket = socket;
+		p.addComponent('auth');
+		p.addComponent('player');
 
-        objects.pushObjectToList(p);
-console.log(p)
-        this.players.push(p);
-    },
-    onDisconnect: async function (socket) {
-        let player = this.players.find(p => p.socket.id === socket.id);
+		objects.pushObjectToList(p);
 
-        if (!player)
-            return;
+		this.players.push(p);
+	},
+	onDisconnect: async function (socket) {
+		let player = this.players.find(p => p.socket.id === socket.id);
 
-        this.players.spliceWhere(p => p.socket.id === socket.id);
-    },
-    route: function (socket, msg) {
-        route.call(this, socket, msg);
-    },
-    routeGlobal: function (msg) {
-        routeGlobal.call(this, msg);
-    }
-}
+		if (!player)
+			return;
+
+		this.players.spliceWhere(p => p.socket.id === socket.id);
+	},
+	route: function (socket, msg) {
+		route.call(this, socket, msg);
+	},
+	routeGlobal: function (msg) {
+		routeGlobal.call(this, msg);
+	}
+};

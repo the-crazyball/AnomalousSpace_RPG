@@ -78,6 +78,20 @@ window._ = {
 }
 
 define([], function () {
+	const urlParams = Object.fromEntries(window.location.search.substr(1).split('&').map(k => k.split('=')));
+
+	window.isMobile = (
+		urlParams.forceMobile === 'true' ||
+		/Mobi|Android/i.test(navigator.userAgent) ||
+		(
+			navigator.platform === 'MacIntel' &&
+			navigator.maxTouchPoints > 1
+		)
+	);
+
+	window.scale = isMobile ? 32 : 1.5;
+	window.scaleMult = isMobile ? 4 : 5;
+
 	return window._;
 });
 

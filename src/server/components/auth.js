@@ -77,7 +77,7 @@ module.exports = {
 	},
 
 	onSendRewards: async function (data, character) {
-		await io.setAsync({
+		await db.setAsync({
 			key: this.username,
 			table: 'accountInfo',
 			value: this.accountInfo,
@@ -98,7 +98,7 @@ module.exports = {
 
 		simple.components.spliceWhere(f => (f.type === 'stash'));
 
-		await io.setAsync({
+		await db.setAsync({
 			key: this.charname,
 			table: 'character',
 			value: simple,
@@ -132,7 +132,7 @@ module.exports = {
 		if (!stash.changed)
 			return;
 
-		await io.setAsync({
+		await db.setAsync({
 			key: username,
 			table: 'stash',
 			value: stash.serialize(),
@@ -157,7 +157,7 @@ module.exports = {
 		if (!this.username)
 			return;
 
-		this.characterList = await io.getAsync({
+		this.characterList = await db.getAsync({
 			key: this.username,
 			table: 'characterList',
 			isArray: true
@@ -176,7 +176,7 @@ module.exports = {
 		if (!this.characterList.some(c => (c.name === charName || c === charName)))
 			return;
 
-		let character = await io.getAsync({
+		let character = await db.getAsync({
 			key: charName,
 			table: 'character',
 			clean: true
@@ -202,7 +202,7 @@ module.exports = {
 	},
 
 	getCustomChannels: async function (character) {
-		this.customChannels = await io.getAsync({
+		this.customChannels = await db.getAsync({
 			key: character.name,
 			table: 'customChannels',
 			isArray: true
@@ -272,7 +272,7 @@ module.exports = {
 			return;
 		}
 
-		let storedPassword = await io.getAsync({
+		let storedPassword = await db.getAsync({
 			key: credentials.username,
 			table: 'login',
 			noParse: true
@@ -307,7 +307,7 @@ module.exports = {
 
 		this.initTracker();
 
-		const accountInfo = await io.getAsync({
+		const accountInfo = await db.getAsync({
 			key: username,
 			table: 'accountInfo',
 			noDefault: true
@@ -383,7 +383,7 @@ module.exports = {
 			return;
 		}
 
-		let exists = await io.getAsync({
+		let exists = await db.getAsync({
 			key: credentials.username,
 			ignoreCase: true,
 			table: 'login',
@@ -401,7 +401,7 @@ module.exports = {
 	},
 
 	onHashGenerated: async function (msg, err, hashedPassword) {
-		await io.setAsync({
+		await db.setAsync({
 			key: msg.data.username,
 			table: 'login',
 			value: hashedPassword
@@ -412,7 +412,7 @@ module.exports = {
 			level: 0
 		};
 
-		await io.setAsync({
+		await db.setAsync({
 			key: msg.data.username,
 			table: 'characterList',
 			value: [],
@@ -460,7 +460,7 @@ module.exports = {
 
 		const releaseCreateLock = await getCreateLock();
 
-		let exists = await io.getAsync({
+		let exists = await db.getAsync({
 			key: name,
 			ignoreCase: true,
 			table: 'character',
@@ -507,7 +507,7 @@ module.exports = {
 
 		eventEmitter.emit('beforeSaveCharacter', eBeforeSaveCharacter);
 
-		await io.setAsync({
+		await db.setAsync({
 			key: name,
 			table: 'character',
 			value: eBeforeSaveCharacter.obj,
@@ -517,7 +517,7 @@ module.exports = {
 		this.characters[name] = simple;
 		this.characterList.push(name);
 		
-		await io.setAsync({
+		await db.setAsync({
 			key: this.username,
 			table: 'characterList',
 			value: this.characterList,
@@ -565,7 +565,7 @@ module.exports = {
 			return;
 		}
 
-		await io.deleteAsync({
+		await db.deleteAsync({
 			key: data.name,
 			table: 'character'
 		});
@@ -579,7 +579,7 @@ module.exports = {
 				level: leaderboard.getLevel(c.name ? c.name : c)
 			}));
 
-		await io.setAsync({
+		await db.setAsync({
 			key: this.username,
 			table: 'characterList',
 			value: characterList,

@@ -9,7 +9,8 @@ require.config({
 		css: 'https://cdnjs.cloudflare.com/ajax/libs/require-css/0.1.10/css.min',
 		main: 'js/main',
         helpers: 'js/misc/helpers',
-		particles: 'plugins/particle-emitter'
+		particles: 'plugins/particle-emitter',
+		honeycomb: 'plugins/honeycomb-grid'
 	},
 	shim: {
         socket: {

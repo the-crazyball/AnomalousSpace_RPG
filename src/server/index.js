@@ -18,6 +18,7 @@ const startup = {
         components.init(this.onComponentsReady.bind(this));
     },
     onComponentsReady: async function() {
+        await clientConfig.init();
         await server.init();
     }
 }

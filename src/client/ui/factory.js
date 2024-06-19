@@ -1,29 +1,36 @@
 define([
     'ui/default',
-    'js/library/events'
+    'js/library/events',
+	'js/library/globals'
 ], function (
     uiDefault,
-    events
+    events,
+	globals
 ) {
     return {
         uis: [],
         ingameUisBuilt: false,
         root: '',
-        uiList: [
-            'messages'
-        ],
+
 
         init: function () {
             events.on('onBuildIngameUis', this.onBuildIngameUis.bind(this));
 			events.on('onUiKeyDown', this.onUiKeyDown.bind(this));
 			events.on('onResize', this.onResize.bind(this));
+
+			globals.clientConfig.uiLoginList.forEach(u => {
+				if (u.path)
+					this.buildModUi(u);
+				else
+					this.build(u);
+			});
         },
         onBuildIngameUis: async function () {
             if (!this.ingameUisBuilt) {
 				events.clearQueue();
 
                 await Promise.all(
-                    this.uiList.map(u => {
+                    globals.clientConfig.uiList.map(u => {
                         const uiType = u.path ? u.path.split('/').pop() : u;
 
                         return new Promise(res => {
@@ -61,7 +68,7 @@ define([
 			if (options && options.path)
 				path = options.path + `\\${type}.js`;
 			else {
-				const entryInClientConfig = this.uiList.find(u => u.type === type);
+				const entryInClientConfig = globals.clientConfig.uiList.find(u => u.type === type);
 				if (entryInClientConfig)
 					path = entryInClientConfig.path;
 				else
@@ -104,6 +111,31 @@ define([
 				events.emit('onHideContextMenu');
 			} else if (['o', 'j', 'h', 'i'].indexOf(keyEvent.key) > -1)
 				$('.uiOverlay').hide();
+		},
+		preload: function () {
+			require([
+				// 'death',
+				// 'dialogue',
+				// 'equipment',
+				// 'events',
+				// 'hud',
+				// 'inventory',
+				// 'overlay',
+				// 'passives',
+				// 'quests',
+				// 'reputation',
+				// 'stash'
+			].map(m => 'ui/templates/' + m + '/' + m), this.afterPreload.bind(this));
+		},
+
+		afterPreload: function () {
+			// if (!globals.clientConfig.tos.required || tosAcceptanceValid()) {
+			// 	this.build('characters');
+
+			// 	return;
+			// }
+
+			// this.build('terms');
 		},
         update: function () {
 			let uis = this.uis;
