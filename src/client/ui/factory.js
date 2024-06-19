@@ -1,20 +1,21 @@
 define([
-    'ui/default',
-    'js/library/events',
-	'js/library/globals'
+	'ui/default',
+	'js/library/events',
+	'js/library/globals',
+	'js/library/tosAcceptanceValid'
 ], function (
-    uiDefault,
-    events,
-	globals
+	uiDefault,
+	events,
+	globals,
+	tosAcceptanceValid
 ) {
-    return {
-        uis: [],
-        ingameUisBuilt: false,
-        root: '',
+	return {
+		uis: [],
+		ingameUisBuilt: false,
+		root: '',
 
-
-        init: function () {
-            events.on('onBuildIngameUis', this.onBuildIngameUis.bind(this));
+		init: function () {
+			events.on('onBuildIngameUis', this.onBuildIngameUis.bind(this));
 			events.on('onUiKeyDown', this.onUiKeyDown.bind(this));
 			events.on('onResize', this.onResize.bind(this));
 
@@ -24,38 +25,37 @@ define([
 				else
 					this.build(u);
 			});
-        },
-        onBuildIngameUis: async function () {
-            if (!this.ingameUisBuilt) {
+		},
+		onBuildIngameUis: async function () {
+			if (!this.ingameUisBuilt) {
 				events.clearQueue();
 
-                await Promise.all(
-                    globals.clientConfig.uiList.map(u => {
-                        const uiType = u.path ? u.path.split('/').pop() : u;
+				await Promise.all(
+					globals.clientConfig.uiList.map(u => {
+						const uiType = u.path ? u.path.split('/').pop() : u;
 
-                        return new Promise(res => {
-                            const doneCheck = () => {
-                                const isDone = this.uis.some(ui => ui.type === uiType);
-                                if (isDone) {
-                                    res();
+						return new Promise(res => {
+							const doneCheck = () => {
+								const isDone = this.uis.some(ui => ui.type === uiType);
+								if (isDone) {
+									res();
 
-                                    return;
-                                }
+									return;
+								}
 
-                                setTimeout(doneCheck, 100);
-                            };
+								setTimeout(doneCheck, 100);
+							};
 
-                            this.build(uiType, { path: u.path });
+							this.build(uiType, { path: u.path });
 
-                            doneCheck();
-                        });
-                    })
-                );
-                this.ingameUisBuilt = true;
-            }
-
-        },
-        build: function (type, options) {
+							doneCheck();
+						});
+					})
+				);
+				this.ingameUisBuilt = true;
+			}
+		},
+		build: function (type, options) {
 			let className = 'ui' + type[0].toUpperCase() + type.substr(1);
 			let el = $('.' + className);
 			if (el.length > 0)
@@ -63,7 +63,7 @@ define([
 
 			this.getTemplate(type, options);
 		},
-        getTemplate: function (type, options) {
+		getTemplate: function (type, options) {
 			let path = null;
 			if (options && options.path)
 				path = options.path + `\\${type}.js`;
@@ -77,19 +77,19 @@ define([
 
 			require([path], this.onGetTemplate.bind(this, options, type));
 		},
-        onGetTemplate: function (options, type, template) {
+		onGetTemplate: function (options, type, template) {
 			let ui = $.extend(true, { type }, uiDefault, template);
 			ui.setOptions(options);
 		
 			requestAnimationFrame(this.renderUi.bind(this, ui));
 		},
-        renderUi: function (ui) {
+		renderUi: function (ui) {
 			ui.render();
 			ui.el.data('ui', ui);
 
 			this.uis.push(ui);
 		},
-        onResize: function () {
+		onResize: function () {
 			this.uis.forEach(function (ui) {
 				if (ui.centered)
 					ui.center();
@@ -97,7 +97,7 @@ define([
 					ui.center(ui.centeredX, ui.centeredY);
 			}, this);
 		},
-        onUiKeyDown: function (keyEvent) {
+		onUiKeyDown: function (keyEvent) {
 			if (keyEvent.key === 'esc') {
 				this.uis.forEach(u => {
 					if (!u.modal || !u.shown)
@@ -129,15 +129,15 @@ define([
 		},
 
 		afterPreload: function () {
-			// if (!globals.clientConfig.tos.required || tosAcceptanceValid()) {
-			// 	this.build('characters');
+			if (!globals.clientConfig.tos.required || tosAcceptanceValid()) {
+				this.build('characters');
 
-			// 	return;
-			// }
+				return;
+			}
 
-			// this.build('terms');
+			this.build('terms');
 		},
-        update: function () {
+		update: function () {
 			let uis = this.uis;
 			let uLen = uis.length;
 			for (let i = 0; i < uLen; i++) {
@@ -146,8 +146,8 @@ define([
 					u.update();
 			}
 		},
-        getUi: function (type) {
+		getUi: function (type) {
 			return this.uis.find(u => u.type === type);
 		}
-    }
-})
+	};
+});

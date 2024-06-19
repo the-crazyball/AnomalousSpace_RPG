@@ -2,21 +2,21 @@ const imageSize = require('image-size');
 
 const events = require('../misc/events');
 const fileLister = require('../misc/fileLister');
-//const tos = require('./tos');
+const tos = require('./tos');
 
 const {
 	version
 } = require('../config/serverConfig');
 
 const config = {
-    version: version,
-    releaseNotes: 'https://github.com/the-crazyball/AnomalousSpace_RPG',
+	version: version,
+	releaseNotes: 'https://github.com/the-crazyball/AnomalousSpace_RPG',
 	// logoPath: null,
 	// loginBgGeneratorPath: null,
 	resourceList: [],
 	// defaultZone: 'fjolarok',
 	textureList: [
-		'tiles',
+		'tiles'
 	// 	'walls',
 	// 	'mobs',
 	// 	'bosses',
@@ -43,7 +43,7 @@ const config = {
 	// ],
 	atlasTextureDimensions: {},
 	atlasTextures: [
-	 	'tiles',
+	 	'tiles'
 	// 	'walls',
 	// 	'objects'
 	],
@@ -211,7 +211,7 @@ const config = {
 	sounds: {
 		ui: []
 	},
-	//tos
+	tos
 };
 
 module.exports = {

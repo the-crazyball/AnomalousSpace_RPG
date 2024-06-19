@@ -18,17 +18,16 @@ define([
 	return {
 		tpl: template,
 		centered: true,
-        beforeRender: true,
 
 		beforeRender: function () {
 			const { clientConfig: { logoPath, version, releaseNotes } } = globals;
             
 			const tempEl = $(this.tpl);
-            tempEl.find('.version').attr('location', releaseNotes);
-            tempEl.find('.version').html(`v${version}`);
+			tempEl.find('.version').attr('location', releaseNotes);
+			tempEl.find('.version').html(`v${version}`);
             
-            if (logoPath)
-			    tempEl.find('.logo').attr('src', logoPath);
+			if (logoPath)
+				tempEl.find('.logo').attr('src', logoPath);
 
 			this.tpl = tempEl.prop('outerHTML');
 		},
