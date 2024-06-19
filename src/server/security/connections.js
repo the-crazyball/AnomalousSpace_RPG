@@ -57,5 +57,8 @@ module.exports = {
 				}
 			}
 		}
+	},
+	modifyPlayerCount: function (delta) {
+		this.playing += delta;
 	}
 };

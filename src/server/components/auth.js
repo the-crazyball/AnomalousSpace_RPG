@@ -1,10 +1,10 @@
 //Imports
 const bcrypt = require('bcrypt-nodejs');
 const messages = require('../misc/messages');
-//const skins = require('../config/skins');
-//const profanities = require('../misc/profanities');
+const skins = require('../config/skins');
+const profanities = require('../misc/profanities');
 //const fixes = require('../fixes/fixes');
-//const spirits = require('../config/spirits');
+const spirits = require('../config/spirits');
 //const ga = require('../security/ga');
 const eventEmitter = require('../misc/events');
 
@@ -71,8 +71,8 @@ module.exports = {
 
 		this.charname = character.name;
 
-		checkLoginRewards(this, data, character, this.onSendRewards.bind(this, data, character));
-
+		//checkLoginRewards(this, data, character, this.onSendRewards.bind(this, data, character));
+		this.onSendRewards(data, character);
 		cons.modifyPlayerCount(1);
 	},
 
@@ -187,7 +187,7 @@ module.exports = {
 			character
 		});
 
-		fixes.fixCharacter(character);
+		//fixes.fixCharacter(character);
 
 		character.cell = skins.getCell(character.skinId);
 		character.sheetName = skins.getSpritesheet(character.skinId);
@@ -209,7 +209,7 @@ module.exports = {
 		});
 
 		let social = character.components.find(c => (c.type === 'social'));
-		this.customChannels = fixes.fixCustomChannels(this.customChannels);
+		//this.customChannels = fixes.fixCustomChannels(this.customChannels);
 		if (social)
 			social.customChannels = this.customChannels;
 	},
@@ -485,7 +485,7 @@ module.exports = {
 			x: null,
 			y: null
 		});
-
+		
 		let simple = this.obj.getSimple(true);
 
 		await this.verifySkin(simple);
@@ -523,10 +523,10 @@ module.exports = {
 			value: this.characterList,
 			serialize: true
 		});
-
+		
 		releaseCreateLock();
 
-		this.initTracker();
+		//this.initTracker();
 
 		this.play({
 			data: {

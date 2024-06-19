@@ -1,0 +1,165 @@
+@import "../../../css/colors.less";
+
+@boxHeight: 276px;
+@boxPadding: 27px;
+@logoWidth: 600px;
+@logoHeight: 200px;
+@messageHeight: @boxPadding;
+@totalWidth: (@logoWidth + (@boxPadding * 2) + 0px);
+@totalHeight: (@logoHeight + @boxHeight + (@boxPadding * 3) + @messageHeight);
+
+.uiCharacters {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: absolute;
+
+	.logo {
+		width: @logoWidth;
+		height: @logoHeight;
+		margin-left: ((@totalWidth / 2) - (@logoWidth / 2));
+		margin-bottom: (@boxPadding * 2);
+		filter: drop-shadow(0px -4px 0px @blueG)  
+		drop-shadow(0px 4px 0px @blueG)
+		drop-shadow(4px 0px 0px @blueG)  
+		drop-shadow(-4px 0px 0px @blueG);
+	}
+
+	.bottom {
+		display: flex;
+		height: 300px;
+
+		.left,
+		.right {
+			background-color: @blackC;
+			filter: drop-shadow(0 -2px 0 @black) drop-shadow(0 2px 0 @black) drop-shadow(2px 0 0 @black) drop-shadow(-2px 0 0 @black);
+		}
+
+		.left {
+			width: 400px;
+			overflow-y: auto;
+
+			.character {
+				height: 50px;
+				width: 100%;
+				color: @white;
+				cursor: pointer;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				&:hover {
+					background-color: @blackA;
+				}
+
+				&.selected {
+					background-color: @blackB;
+				}
+
+			}
+
+		}
+
+		.right {
+			width: 400px;
+			padding: 10px;
+			margin-left: 30px;
+			display: flex;
+			flex-direction: column;
+
+			.portrait {
+				height: 205px;
+				background-color: @black;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				.sprite {
+					width: 8px;
+					height: 8px;
+					transform-origin: 50% 50%;
+					transform: scale(16);
+					image-rendering: pixelated;
+					image-rendering: optimizeSpeed;
+					image-rendering: crisp-edges;
+					display: none;
+				}
+
+			}
+
+			.info {
+				height: 30px;
+				margin-bottom: 10px;
+				background-color: @black;
+				color: @white;
+				display: flex;
+				justify-content: space-between;
+				padding: 0px 10px;
+
+				.name {
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				.class {
+					text-align: right;
+					color: darken(@white, 25%);
+				}
+
+			}
+
+			.buttons {
+				display: flex;
+
+				.btn {
+					background-color: @blackA;
+					width: calc((100% - (10px * 2)) / 3);
+					float: left;
+					margin-right: 10px;
+					color: @white;
+
+					&:last-child {
+						margin-right: 0px;
+					}
+
+					&:hover {
+						background-color: @blackB;
+					}
+
+					&.deleting {
+						background-color: @redB;
+						color: @white;
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
+	.message {
+		height: 30px;
+		width: 100%;
+		margin-top: 30px;
+		float: left;
+		text-align: center;
+		color: @white;
+		filter: drop-shadow(0px -2px 0px @blackD) 
+		drop-shadow(0px 2px 0px @blackD)
+		drop-shadow(2px 0px 0px @blackD) 
+		drop-shadow(-2px 0px 0px @blackD);
+	}
+
+}
+
+.mobile .uiCharacters {
+	height: 300px;
+
+	.logo {
+		display: none;
+	}
+
+}
