@@ -34,5 +34,28 @@ module.exports = {
 	},
 	routeGlobal: function (msg) {
 		routeGlobal.call(this, msg);
+	},
+	logOut: async function (exclude) {
+		const { players } = this;
+
+		let pLen = players.length;
+		for (let i = 0; i < pLen; i++) {
+			const p = players[i];
+
+			if (!p || p === exclude || !p.auth)
+				continue;
+			else if (p.auth.username === exclude.auth.username) {
+				if (p.name && p.zoneId)
+					await atlas.forceSavePlayer(p.id, p.zoneId);
+
+				if (p.socket?.connected)
+					p.socket.emit('dc', {});
+				else {
+					players.splice(i, 1);
+					i--;
+					pLen--;
+				}
+			}
+		}
 	}
 };

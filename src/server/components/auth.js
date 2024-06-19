@@ -305,7 +305,7 @@ module.exports = {
 		this.username = username;
 		await cons.logOut(this.obj);
 
-		this.initTracker();
+		//this.initTracker();
 
 		const accountInfo = await db.getAsync({
 			key: username,
